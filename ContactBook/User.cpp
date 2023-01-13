@@ -74,7 +74,7 @@ User* User::getUserByLogin(MYSQL mysql, string& login)
 
 bool User::isPasswordCorrect(MYSQL mysql, int id, string password)
 {
-	auto query = "SELECT Id FROM Users WHERE Id = " + to_string(id) + " AND Password = \'" + password + "\';";
+	auto query = "SELECT Id FROM Users WHERE Id = " + to_string(id) + " AND BINARY Password = \'" + password + "\';";
 	if (mysql_query(&mysql, query.c_str()))
 	{
 		cout << mysql_error(&mysql);

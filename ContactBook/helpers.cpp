@@ -1,6 +1,6 @@
 #include "helpers.h"
 
-void SetStdinEcho(bool enable)
+void CensorePassword(bool enable)
 {
 	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD mode;

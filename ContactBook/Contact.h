@@ -1,10 +1,10 @@
-#include <iostream>
 #include <mysql.h>
 #include <iostream>
 #include <string>
-#include <map>
 
 using namespace std;
+
+class Contacts;
 
 class Contact
 {
@@ -29,19 +29,36 @@ public:
 	int getContactDbId();
 	int getUserId();
 
+	void setId(int id);
 	void setFirstName(string firstName);
 	void setLastName(string lastName);
 	void setPhoneNumber(string phoneNumber);
 	void setAddress(string address);
 	void setEmail(string email);
+	void setContactDbId(int contactDbId);
+	void setUserId(int userId);
 
-	map<Contact*, int> getAllContactsByUserId(MYSQL mysql, int userId);
-	map<Contact*, int> getContactsByFirstNameAndUserId(MYSQL mysql, string firstName, int userId);
+	Contacts getAllContactsByUserId(MYSQL mysql, int userId);
+	Contacts getContactsByFirstNameAndUserId(MYSQL mysql, string firstName, int userId);
 	Contact* getContactById(MYSQL mysql, int contactId);
 	bool createContact(MYSQL mysql, Contact* newContact);
 	bool updateContact(MYSQL mysql, Contact* contact);
+	bool deleteContact(MYSQL mysql, int contactDbId, int userId);
 	
 	void showContacts(Contact* contacts, int count);
 	void writeContact(int userId);
 };
 
+class Contacts
+{
+	Contact* _contacts;
+	int _count;
+public:
+	Contacts(Contact* contacts = NULL, int count = 0);
+	~Contacts();
+	Contact* getContacts();
+	int getCount();
+
+	void setContacts(Contact* contacts);
+	void setCount(int count);
+};

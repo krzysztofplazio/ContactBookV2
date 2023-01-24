@@ -1,5 +1,4 @@
 #include "Contact.h"
-#include <conio.h>
 
 using namespace std;
 
@@ -50,6 +49,11 @@ int Contact::getUserId()
 	return _userId;
 }
 
+void Contact::setId(int id)
+{
+	_id = id;
+}
+
 void Contact::setFirstName(string firstName)
 {
 	_firstName = firstName;
@@ -75,16 +79,27 @@ void Contact::setEmail(string email)
 	_email = email;
 }
 
-map<Contact*, int> Contact::getAllContactsByUserId(MYSQL mysql, int userId)
+void Contact::setContactDbId(int contactDbId)
+{
+	_contactDbId = contactDbId;
+}
+
+void Contact::setUserId(int userId)
+{
+	_userId = userId;
+}
+
+Contacts Contact::getAllContactsByUserId(MYSQL mysql, int userId)
 {
 	MYSQL_ROW rows;
-	map<Contact*, int> contacts;
+	Contacts contacts;
+	contacts.setContacts(NULL);
+	contacts.setCount(0);
 	//contacts.emplace(NULL, 0);
 	auto query = "SELECT Id, FirstName, LastName, phoneNumber, address, email, userId FROM Contacts WHERE UserId = " + to_string(userId) + ";";
 	if (mysql_query(&mysql, query.c_str()))
 	{
 		cout << mysql_error(&mysql);
-		contacts[NULL] = 0;
 		return contacts;
 	}
 
@@ -92,7 +107,6 @@ map<Contact*, int> Contact::getAllContactsByUserId(MYSQL mysql, int userId)
 	auto rowsNum = mysql_num_rows(response);
 	if (mysql_num_rows(response) == 0)
 	{
-		contacts[NULL] = 0;
 		return contacts;
 	}
 	
@@ -100,27 +114,29 @@ map<Contact*, int> Contact::getAllContactsByUserId(MYSQL mysql, int userId)
 	auto i = 0;
 	while ((rows = mysql_fetch_row(response)) != NULL || i < rowsNum)
 	{
-		contactArray[i]._id = i + 1;
-		contactArray[i]._contactDbId = atoi(rows[0]);
-		contactArray[i]._firstName = rows[1];
-		contactArray[i]._lastName = rows[2];
-		contactArray[i]._phoneNumber = rows[3];
-		contactArray[i]._address = rows[4];
-		contactArray[i]._email = rows[5];
+		contactArray[i].setId(i + 1);
+		contactArray[i].setContactDbId(atoi(rows[0]));
+		contactArray[i].setFirstName(rows[1]);
+		contactArray[i].setLastName(rows[2]);
+		contactArray[i].setPhoneNumber(rows[3]);
+		contactArray[i].setAddress(rows[4]);
+		contactArray[i].setEmail(rows[5]);
 		i++;
 	}
 	mysql_free_result(response);
-	contacts[contactArray] = rowsNum;
+	contacts.setContacts(contactArray);
+	contacts.setCount(rowsNum);
 	return contacts;
 }
 
-map<Contact*, int> Contact::getContactsByFirstNameAndUserId(MYSQL mysql, string firstName, int userId)
+Contacts Contact::getContactsByFirstNameAndUserId(MYSQL mysql, string firstName, int userId)
 {
 	MYSQL_ROW rows;
-	map<Contact*, int> contacts;
+	Contacts contacts;
+	contacts.setContacts(NULL);
+	contacts.setCount(0);
 	if (firstName == "" || firstName.find_first_not_of(' '))
 	{
-		contacts[NULL] = 0;
 		return contacts;
 	}
 
@@ -128,7 +144,6 @@ map<Contact*, int> Contact::getContactsByFirstNameAndUserId(MYSQL mysql, string 
 	if (mysql_query(&mysql, query.c_str()))
 	{
 		cout << mysql_error(&mysql);
-		contacts[NULL] = 0;
 		return contacts;
 	}
 
@@ -136,7 +151,6 @@ map<Contact*, int> Contact::getContactsByFirstNameAndUserId(MYSQL mysql, string 
 	auto rowsNum = mysql_num_rows(response);
 	if (mysql_num_rows(response) == 0)
 	{
-		contacts[NULL] = 0;
 		return contacts;
 	}
 
@@ -144,17 +158,18 @@ map<Contact*, int> Contact::getContactsByFirstNameAndUserId(MYSQL mysql, string 
 	auto i = 0;
 	while ((rows = mysql_fetch_row(response)) != NULL || i < rowsNum)
 	{
-		contactArray[i]._id = i + 1;
-		contactArray[i]._contactDbId = atoi(rows[0]);
-		contactArray[i]._firstName = rows[1];
-		contactArray[i]._lastName = rows[2];
-		contactArray[i]._phoneNumber = rows[3];
-		contactArray[i]._address = rows[4];
-		contactArray[i]._email = rows[5];
+		contactArray[i].setId(i + 1);
+		contactArray[i].setContactDbId(atoi(rows[0]));
+		contactArray[i].setFirstName(rows[1]);
+		contactArray[i].setLastName(rows[2]);
+		contactArray[i].setPhoneNumber(rows[3]);
+		contactArray[i].setAddress(rows[4]);
+		contactArray[i].setEmail(rows[5]);
 		i++;
 	}
 	mysql_free_result(response);
-	contacts[contactArray] = rowsNum;
+	contacts.setContacts(contactArray);
+	contacts.setCount(rowsNum);
 	return contacts;
 }
 
@@ -224,6 +239,19 @@ bool Contact::updateContact(MYSQL mysql, Contact* contact)
 		+ "phoneNumber = \'" +  contact->_phoneNumber + "\',"
 		+ "address = \'" + contact->_address + "\',"
 		+ "email = \'" + contact->_email + "\' WHERE Id = " + to_string(contact->_contactDbId) + " AND UserId = " + to_string(contact->_userId) + ";";
+
+	if (mysql_query(&mysql, query.c_str()))
+	{
+		cout << mysql_error(&mysql);
+		return false;
+	}
+
+	return true;
+}
+
+bool Contact::deleteContact(MYSQL mysql, int contactDbId, int userId)
+{
+	string query = "DELETE FROM contacts WHERE Id = " + to_string(contactDbId) + " AND UserId = " + to_string(userId) + ";";
 
 	if (mysql_query(&mysql, query.c_str()))
 	{

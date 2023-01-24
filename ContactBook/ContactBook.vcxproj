@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Contact.cpp" />
+    <ClCompile Include="Contacts.cpp" />
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="Host.cpp" />
     <ClCompile Include="main.cpp" />
@@ -152,6 +153,9 @@
     <ClInclude Include="Host.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="User.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

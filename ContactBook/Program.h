@@ -1,6 +1,6 @@
 #pragma once
 #include "User.h"
-#include "Contact.h";
+#include "Contact.h"
 #include <conio.h>
 #include "helpers.h"
 #include <windows.h>
@@ -14,6 +14,7 @@ class Program
 	static void setNewContact(MYSQL mysql, User* user, Contact* contact);
 	static void editContact(MYSQL mysql, User* user);
 	static void changeContact(MYSQL mysql, User* user, Contact* contact);
+	static void deleteContact(MYSQL mysql, User* user);
 public:
 	static void loginUser(MYSQL mysql);
 };

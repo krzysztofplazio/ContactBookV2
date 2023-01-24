@@ -177,7 +177,7 @@ void Program::editContact(MYSQL mysql, User* user)
 	if ((c = getchar()) != '\n' && c != EOF)
 		while ((c = getchar()) != '\n' && c != EOF) {}
 
-	auto pickedContact = contact.getContactById(mysql, userId);
+	auto pickedContact = contact.getContactById(mysql, userId, user->getId());
 	if (pickedContact == NULL)
 	{
 		cout << "\nNie ma takiego kontaku. ";
@@ -304,7 +304,7 @@ void Program::deleteContact(MYSQL mysql, User* user)
 	{
 		cout << "Czy na pewno chcesz usunac ten kontakt? [n|N/*]\n";
 		auto pick = _getch();
-		if (pick != 'n' && pick != 'N')
+		if (pick == 'n' && pick == 'N')
 		{
 			cout << "Anulowano usuniecie kontaktu.";
 			backToMainMenu(mysql, user);
@@ -312,11 +312,14 @@ void Program::deleteContact(MYSQL mysql, User* user)
 
 		system("cls");
 		contact.showContacts(contacts.getContacts(), 1);
-		if (contact.deleteContact(mysql, contacts.getContacts()[0].getContactDbId()))
+		if (contact.deleteContact(mysql, contacts.getContacts()[0].getContactDbId(), user->getId()))
 		{
-			cout << "Kontakt zosta³ usuniêty.";
+			cout << "Kontakt zostal usuniety.";
 			backToMainMenu(mysql, user);
 		}
+
+		cout << "Nie ma takiego kontaku.";
+		backToMainMenu(mysql, user);
 	}
 
 	cout << "Wybierz numer indeksu kontaktu, ktory cie interesuje: ";
@@ -327,7 +330,7 @@ void Program::deleteContact(MYSQL mysql, User* user)
 	if ((c = getchar()) != '\n' && c != EOF)
 		while ((c = getchar()) != '\n' && c != EOF) {}
 
-	auto pickedContact = contact.getContactById(mysql, userId);
+	auto pickedContact = contact.getContactById(mysql, userId, user->getId());
 	if (pickedContact == NULL)
 	{
 		cout << "\nNie ma takiego kontaku. ";
@@ -336,11 +339,14 @@ void Program::deleteContact(MYSQL mysql, User* user)
 
 	system("cls");
 	contact.showContacts(pickedContact, 1);
-	if (contact.deleteContact(mysql, contacts.getContacts()[0].getContactDbId()))
+	if (contact.deleteContact(mysql, contacts.getContacts()[0].getContactDbId(), user->getId()))
 	{
 		cout << "Kontakt zosta³ usuniêty.";
 		backToMainMenu(mysql, user);
 	}
+
+	cout << "Nie ma takiego kontaku.";
+	backToMainMenu(mysql, user);
 }
 
 void Program::loginUser(MYSQL mysql)

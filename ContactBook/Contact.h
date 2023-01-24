@@ -40,7 +40,7 @@ public:
 
 	Contacts getAllContactsByUserId(MYSQL mysql, int userId);
 	Contacts getContactsByFirstNameAndUserId(MYSQL mysql, string firstName, int userId);
-	Contact* getContactById(MYSQL mysql, int contactId);
+	Contact* getContactById(MYSQL mysql, int contactId, int userId);
 	bool createContact(MYSQL mysql, Contact* newContact);
 	bool updateContact(MYSQL mysql, Contact* contact);
 	bool deleteContact(MYSQL mysql, int contactDbId, int userId);

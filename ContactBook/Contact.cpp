@@ -173,11 +173,11 @@ Contacts Contact::getContactsByFirstNameAndUserId(MYSQL mysql, string firstName,
 	return contacts;
 }
 
-Contact* Contact::getContactById(MYSQL mysql, int contactId)
+Contact* Contact::getContactById(MYSQL mysql, int contactId, int userId)
 {
 	auto contact = new Contact();
 	MYSQL_ROW rows;
-	auto query = "SELECT Id, FirstName, LastName, phoneNumber, address, email, userId FROM Contacts WHERE Id = " + to_string(contactId) + ";";
+	auto query = "SELECT Id, FirstName, LastName, phoneNumber, address, email, userId FROM Contacts WHERE Id = " + to_string(contactId) + " AND UserId = " + to_string(userId) + ";";
 	if (mysql_query(&mysql, query.c_str()))
 	{
 		cout << mysql_error(&mysql);

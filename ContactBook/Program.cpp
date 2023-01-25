@@ -4,13 +4,13 @@ void Program::mainMenu(MYSQL mysql, User* user)
 {
 	Contact contact{};
 	system("cls");
-	cout << "Witaj w swojej prywatnej ksiazce konatkow " << user->getFirstName() << "!\nCo chcialbys teraz zrobic ? \n";
+	cout << "Witaj w swojej prywatnej ksi¹¿ce konatków " << user->getFirstName() << "!\nCo chcialbyœ teraz zrobiæ ? \n";
 	cout << "1. Wszystkie kontakty.\n";
 	cout << "2. Wyszukaj kontakt.\n";
 	cout << "3. Dodaj nowy kontakt.\n";
-	cout << "4. Edytuj instejacy kontakt.\n";
-	cout << "5. Usun wybrany kontakt.\n";
-	cout << "6. Zakoncz dzialanie programu.\n";
+	cout << "4. Edytuj instej¹cy kontakt.\n";
+	cout << "5. Usuñ wybrany kontakt.\n";
+	cout << "6. Zakoñcz dzia³anie programu.\n";
 	cout << "\nWybierz numer: ";
 	auto choose = _getch();
 	switch (choose)
@@ -20,7 +20,7 @@ void Program::mainMenu(MYSQL mysql, User* user)
 		auto contacts = contact.getAllContactsByUserId(mysql, user->getId());
 		if (contacts.getCount() == 0)
 		{
-			cout << "Brak kontaktow w twojej liscie.";
+			cout << "Brak kontaktów w twojej liscie.";
 			backToMainMenu(mysql, user);
 		}
 
@@ -34,7 +34,7 @@ void Program::mainMenu(MYSQL mysql, User* user)
 	{
 		string name;
 		system("cls");
-		cout << "Podaj imie szukanego kontaktu: ";
+		cout << "Podaj imiê szukanego kontaktu: ";
 		cin >> name;
 		cout << endl;
 
@@ -45,7 +45,7 @@ void Program::mainMenu(MYSQL mysql, User* user)
 		auto contacts = contact.getContactsByFirstNameAndUserId(mysql, name, user->getId());
 		if (contacts.getCount() == 0)
 		{
-			cout << "Brak kontaktow w twojej liscie.";
+			cout << "Brak kontaktów w twojej liscie.";
 			backToMainMenu(mysql, user);
 		}
 
@@ -59,7 +59,7 @@ void Program::mainMenu(MYSQL mysql, User* user)
 	case '3':
 	{
 		system("cls");
-		cout << "Dodaj swoj nowy kontakt!\n";
+		cout << "Dodaj swój nowy kontakt!\n";
 		Contact contact;
 		int c;
 		contact.writeContact(user->getId());
@@ -77,7 +77,7 @@ void Program::mainMenu(MYSQL mysql, User* user)
 	}
 	case '6':
 	{
-		string bye = "\nZegnaj! Do zobaczenia!";
+		string bye = "\n¯egnaj! Do zobaczenia!";
 		for (auto i = 0; i < bye.length(); i++)
 		{
 			cout << bye[i];
@@ -102,7 +102,7 @@ void Program::backToMainMenu(MYSQL mysql, User* user)
 void Program::setNewContact(MYSQL mysql, User* user, Contact* newContact)
 {
 	char sure;
-	cout << "Czy jestes pewny, ze chcesz dodac ten kontakt? [y/N]: ";
+	cout << "Czy jesteœ pewny, ¿e chcesz dodaæ ten kontakt? [y/N]: ";
 	while (true)
 	{
 		sure = _getch();
@@ -116,7 +116,7 @@ void Program::setNewContact(MYSQL mysql, User* user, Contact* newContact)
 
 				if (!newContact->createContact(mysql, newContact))
 				{
-					cout << "Nie udalo sie dodac kontaktu.";
+					cout << "Nie uda³o sie dodaæ kontaktu.";
 					backToMainMenu(mysql, user);
 				}
 
@@ -140,7 +140,7 @@ void Program::editContact(MYSQL mysql, User* user)
 	system("cls");
 	Contact contact;
 	string name;
-	cout << "Wyszukaj kontakt, ktory chcesz zedytowac: ";
+	cout << "Wyszukaj kontakt, który chcesz zedytowaæ: ";
 	cin >> name;
 
 	auto contacts = contact.getContactsByFirstNameAndUserId(mysql, name, user->getId());
@@ -156,11 +156,11 @@ void Program::editContact(MYSQL mysql, User* user)
 
 	if (contacts.getCount() == 1)
 	{
-		cout << "Czy na pewno chcesz edytowac ten kontakt? [n|N/*]\n";
+		cout << "Czy na pewno chcesz edytowaæ ten kontakt? [n|N/*]\n";
 		auto pick = _getch();
 		if (pick != 'n' && pick != 'N')
 		{
-			cout << "Anulowano edycje kontaktu.";
+			cout << "Anulowano edycjê kontaktu.";
 			backToMainMenu(mysql, user);
 		}
 
@@ -169,7 +169,7 @@ void Program::editContact(MYSQL mysql, User* user)
 		changeContact(mysql, user, contacts.getContacts());
 	}
 
-	cout << "Wybierz numer indeksu kontaktu, ktory cie interesuje: ";
+	cout << "Wybierz numer indeksu kontaktu, który ciê interesuje: ";
 	int userId;
 	cin >> userId;
 
@@ -192,7 +192,7 @@ void Program::editContact(MYSQL mysql, User* user)
 void Program::changeContact(MYSQL mysql, User* user, Contact* contact)
 {
 	string query;
-	cout << "\n\nKtora wartosc chcesz edytowac?\n";
+	cout << "\n\nKtór¹ wartoœæ chcesz edytowaæ?\n";
 	cout << "1. Imie\n";
 	cout << "2. Nazwisko\n";
 	cout << "3. Numer telefonu\n";
@@ -209,7 +209,7 @@ void Program::changeContact(MYSQL mysql, User* user, Contact* contact)
 		case '1':
 		{
 			string firstName;
-			cout << "Podaj nowe imie: ";
+			cout << "Podaj nowe imiê: ";
 			cin >> firstName;
 			contact->setFirstName(firstName);
 			goto exit_loop;
@@ -261,7 +261,7 @@ void Program::changeContact(MYSQL mysql, User* user, Contact* contact)
 		break;
 		default:
 		{
-			cout << "Wybierz poprawna opcje.\n";
+			cout << "Wybierz poprawn¹ opcje.\n";
 		}
 		break;
 		}
@@ -273,7 +273,7 @@ exit_loop:;
 	auto isEdited = contact->updateContact(mysql, contact);
 	if (!isEdited)
 	{
-		cout << "Kontakt nie zostal zedytowany. Prosze sprobowac jeszcze raz.\n";
+		cout << "Kontakt nie zosta³ zedytowany. Proszê sprobowaæ jeszcze raz.\n";
 		backToMainMenu(mysql, user);
 	}
 
@@ -286,7 +286,7 @@ void Program::deleteContact(MYSQL mysql, User* user)
 	system("cls");
 	Contact contact;
 	string name;
-	cout << "Wyszukaj kontakt, ktory chcesz usunac: ";
+	cout << "Wyszukaj kontakt, który chcesz usun¹æ: ";
 	cin >> name;
 
 	auto contacts = contact.getContactsByFirstNameAndUserId(mysql, name, user->getId());
@@ -302,11 +302,11 @@ void Program::deleteContact(MYSQL mysql, User* user)
 
 	if (contacts.getCount() == 1)
 	{
-		cout << "Czy na pewno chcesz usunac ten kontakt? [n|N/*]\n";
+		cout << "Czy na pewno chcesz usun¹æ ten kontakt? [n|N/*]\n";
 		auto pick = _getch();
-		if (pick == 'n' && pick == 'N')
+		if (pick == 'n' || pick == 'N')
 		{
-			cout << "Anulowano usuniecie kontaktu.";
+			cout << "Anulowano usuniêcie kontaktu.";
 			backToMainMenu(mysql, user);
 		}
 
@@ -314,7 +314,7 @@ void Program::deleteContact(MYSQL mysql, User* user)
 		contact.showContacts(contacts.getContacts(), 1);
 		if (contact.deleteContact(mysql, contacts.getContacts()[0].getContactDbId(), user->getId()))
 		{
-			cout << "Kontakt zostal usuniety.";
+			cout << "Kontakt zosta³ usuniêty.";
 			backToMainMenu(mysql, user);
 		}
 
@@ -322,7 +322,7 @@ void Program::deleteContact(MYSQL mysql, User* user)
 		backToMainMenu(mysql, user);
 	}
 
-	cout << "Wybierz numer indeksu kontaktu, ktory cie interesuje: ";
+	cout << "Wybierz numer indeksu kontaktu, który ciê interesuje: ";
 	int userId;
 	cin >> userId;
 
@@ -361,15 +361,10 @@ void Program::loginUser(MYSQL mysql)
 	CensorePassword(true);
 
 	User* userFromDb = user->getUserByLogin(mysql, login);
-	if (userFromDb == NULL)
+	if (userFromDb == NULL || !user->isPasswordCorrect(mysql, userFromDb->getId(), password))
 	{
-		cout << "\nNiepoprawny login lub haslo. Sprobuj ponownie.\n";
-		loginUser(mysql);
-	}
-
-	if (userFromDb != NULL && !user->isPasswordCorrect(mysql, userFromDb->getId(), password))
-	{
-		cout << "\nNiepoprawny login lub haslo. Sprobuj ponownie.\n";
+		system("cls");
+		cout << "\nNiepoprawny login lub has³o. Spróbuj ponownie.\n";
 		loginUser(mysql);
 	}
 
